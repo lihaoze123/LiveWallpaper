@@ -14,7 +14,7 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	HWND hProgm = FindWindow(L"Progman", 0);
 	SendMessageTimeout(hProgm, 0x52C, 0, 0, 0, 100, 0);
 
-	HWND hwnd = CreateWindowEx(0, CLASS_NAME, NULL, WS_POPUP, 0, 0, 3440, 1440, NULL, NULL, hInstance, NULL);
+	HWND hwnd = CreateWindowEx(0, CLASS_NAME, NULL, WS_POPUP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), NULL, NULL, hInstance, NULL);
 
 	if (hwnd == NULL)
 		return 0;

@@ -1,6 +1,3 @@
-#pragma once
-
-#include "resource.h"
 #include <Windows.h>
 #include <stdlib.h>
 #include <string>
