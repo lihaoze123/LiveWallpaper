@@ -37,5 +37,5 @@ jobs:
         - name: Release
           uses: softprops/action-gh-release@v1
           with:
-            files: "x64\\Release\\LiveWallpaper_${{ steps.get_version.outputs.VERSION }}.zip"
+            files: "LiveWallpaper_${{ steps.get_version.outputs.VERSION }}.zip"
             token: ${{ secrets.TOKEN }}
