@@ -17,7 +17,7 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	HDC hdc = GetDC(NULL);
 	int iXLength = GetDeviceCaps(hdc, DESKTOPHORZRES), iYLength = GetDeviceCaps(hdc, DESKTOPVERTRES);
 
-	HWND hwnd = CreateWindowEx(
+	HWND hWnd = CreateWindowEx(
 		0, 
 		CLASS_NAME, 
 		NULL, 
@@ -34,15 +34,17 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 
 	ReleaseDC(NULL, hdc);
 
-	if (hwnd == NULL)
+	RegisterHotKey(hWnd, NULL, MOD_WIN, VK_ESCAPE);
+
+	if (hWnd == NULL)
 		return 0;
 
-	ShowWindow(hwnd, iCmdShow);
-	UpdateWindow(hwnd);
+	ShowWindow(hWnd, iCmdShow);
+	UpdateWindow(hWnd);
 
 	CreateCoreWebView2Environment(Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
 		[&](HRESULT result, ICoreWebView2Environment* env) {
-			env->CreateCoreWebView2Controller(hwnd, Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+			env->CreateCoreWebView2Controller(hWnd, Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
 				[&](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
 					if (controller != nullptr) {
 						webviewController = controller;
@@ -62,7 +64,7 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 		}
 	).Get());
 
-	SetParent(hwnd, hProgm);
+	SetParent(hWnd, hProgm);
 	EnumWindows(EnumWindowsProc, 0);
 
 	MSG msg = { };
@@ -74,30 +76,31 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	return 0;
 }
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 	case WM_PAINT: {
 		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hwnd, &ps);
+		HDC hdc = BeginPaint(hWnd, &ps);
 
 		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-		EndPaint(hwnd, &ps);
+		EndPaint(hWnd, &ps);
 
 		return 0;
 	}
 
+	case WM_HOTKEY: // fallthrough
 	case WM_DESTROY: {
 		PostQuitMessage(0);
 		return 0;
 	}
 	}
-	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-BOOL CALLBACK EnumWindowsProc(_In_ HWND hwnd, _In_ LPARAM Lparam) {
-	HWND hDefView = FindWindowEx(hwnd, 0, L"SHELLDLL_DefView", 0);
+BOOL CALLBACK EnumWindowsProc(_In_ HWND hWnd, _In_ LPARAM Lparam) {
+	HWND hDefView = FindWindowEx(hWnd, 0, L"SHELLDLL_DefView", 0);
 	if (hDefView != 0) {
-		HWND hWorkerw = FindWindowEx(0, hwnd, L"WorkerW", 0);
+		HWND hWorkerw = FindWindowEx(0, hWnd, L"WorkerW", 0);
 		ShowWindow(hWorkerw, 0);
 
 		return FALSE;
