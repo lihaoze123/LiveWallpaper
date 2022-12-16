@@ -14,7 +14,7 @@
 
 双击 `LiveWallpaper.exe` 文件直接运行，修改 `resource/wallpaper.html` 文件以达到更多效果。
 
-**可以通过组合键 Win+Esc 结束程序**
+可以通过组合键 <kbd>Win</kbd>+<kbd>Esc</kbd> 结束程序
 
 ## 构建
 
