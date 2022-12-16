@@ -32,7 +32,7 @@ jobs:
           run: msbuild LiveWallpaper.sln /t:Rebuild /p:Configuration=Release
         
         - name: Pack
-          run: 7z a LiveWallpaper_${{ steps.get_version.outputs.VERSION }}.zip x64\Release\LiveWallpaper_${{ steps.get_version.outputs.VERSION }}\*
+          run: 7z a LiveWallpaper_${{ steps.get_version.outputs.VERSION }}.zip .\x64\Release\LiveWallpaper_${{ steps.get_version.outputs.VERSION }}\*
 
         - name: Release
           uses: softprops/action-gh-release@v1
