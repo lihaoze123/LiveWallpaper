@@ -31,8 +31,6 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 						webviewController->get_CoreWebView2(&webview);
 					}
 
-					BOOL containsFullScreenElement = TRUE;
-
 					RECT bounds;
 					GetClientRect(hwnd, &bounds);
 					webviewController->put_Bounds(bounds);
