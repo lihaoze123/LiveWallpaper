@@ -15,8 +15,8 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	SendMessageTimeout(hProgm, 0x52C, 0, 0, 0, 100, 0);
 
 	HDC hdc = GetDC(NULL);
-	int iXLength = GetDeviceCaps(hdc, DESKTOPHORZRES);
-	int iYLength = GetDeviceCaps(hdc, DESKTOPVERTRES);
+	int iXLength = GetDeviceCaps(hdc, DESKTOPHORZRES), iYLength = GetDeviceCaps(hdc, DESKTOPVERTRES);
+
 	HWND hwnd = CreateWindowEx(
 		0, 
 		CLASS_NAME, 
@@ -31,6 +31,7 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 		hInstance, 
 		NULL
 	);
+
 	ReleaseDC(NULL, hdc);
 
 	if (hwnd == NULL)
@@ -48,13 +49,7 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 						webviewController->get_CoreWebView2(&webview);
 					}
 
-					BOOL containsFullScreenElement = TRUE;
-
-					RECT bounds;
-					bounds.left = 0;
-					bounds.top = 0;
-					bounds.right = iXLength;
-					bounds.bottom = iYLength;
+					RECT bounds = { 0, 0, iXLength, iYLength };
 					webviewController->put_Bounds(bounds);
 
 					std::wstring uri = std::wstring(L"file://") + std::filesystem::current_path().generic_wstring() + std::wstring(L"/resource/demo.html");
