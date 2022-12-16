@@ -33,6 +33,8 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	);
 	ReleaseDC(NULL, hdc);
 
+	RegisterHotKey(hwnd, NULL, MOD_WIN, VK_ESCAPE);
+
 	if (hwnd == NULL)
 		return 0;
 
@@ -91,6 +93,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		return 0;
 	}
 
+	case WM_HOTKEY: // fallthrough
 	case WM_DESTROY: {
 		PostQuitMessage(0);
 		return 0;
