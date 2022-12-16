@@ -14,7 +14,24 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	HWND hProgm = FindWindow(L"Progman", 0);
 	SendMessageTimeout(hProgm, 0x52C, 0, 0, 0, 100, 0);
 
-	HWND hwnd = CreateWindowEx(0, CLASS_NAME, NULL, WS_POPUP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), NULL, NULL, hInstance, NULL);
+	HDC hdc = GetDC(NULL);
+	int iXLength = GetDeviceCaps(hdc, DESKTOPHORZRES);
+	int iYLength = GetDeviceCaps(hdc, DESKTOPVERTRES);
+	HWND hwnd = CreateWindowEx(
+		0, 
+		CLASS_NAME, 
+		NULL, 
+		WS_POPUP, 
+		0, 
+		0, 
+		iXLength,
+		iYLength, 
+		NULL, 
+		NULL, 
+		hInstance, 
+		NULL
+	);
+	ReleaseDC(NULL, hdc);
 
 	if (hwnd == NULL)
 		return 0;
@@ -23,16 +40,21 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	UpdateWindow(hwnd);
 
 	CreateCoreWebView2Environment(Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
-		[hwnd](HRESULT result, ICoreWebView2Environment* env) {
+		[&](HRESULT result, ICoreWebView2Environment* env) {
 			env->CreateCoreWebView2Controller(hwnd, Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-				[hwnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
+				[&](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
 					if (controller != nullptr) {
 						webviewController = controller;
 						webviewController->get_CoreWebView2(&webview);
 					}
 
+					BOOL containsFullScreenElement = TRUE;
+
 					RECT bounds;
-					GetClientRect(hwnd, &bounds);
+					bounds.left = 0;
+					bounds.top = 0;
+					bounds.right = iXLength;
+					bounds.bottom = iYLength;
 					webviewController->put_Bounds(bounds);
 
 					std::wstring uri = std::wstring(L"file://") + std::filesystem::current_path().generic_wstring() + std::wstring(L"/resource/demo.html");
