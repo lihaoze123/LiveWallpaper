@@ -18,7 +18,14 @@
 
 ## 构建
 
-请首先确保已安装 **Visual Studio 2022**，然后按照 **WebView2** [官方指南 ](https://learn.microsoft.com/en-us/microsoft-edge/webview2/get-started/win32)安装依赖库 `Microsoft.Web.WebView2` 以及 `Microsoft.Windows.ImplementationLibrary` ，双击 `LiveWallpaper.sln` 以编译。
+请首先确保已安装 **Visual Studio 2022**，然后按照 **WebView2** [官方指南 ](https://learn.microsoft.com/en-us/microsoft-edge/webview2/get-started/win32)安装依赖库 `Microsoft.Web.WebView2` 以及 `Microsoft.Windows.ImplementationLibrary`。
+
+您可以通过双击 `LiveWallpaper.sln` 打开 **Visual Studio 2022** 以编译，或者通过命令行使用 **MSBuild** 等工具来生成，比如：
+
+```
+C:\"Program Files"\"Microsoft Visual Studio"\2022\Community\Msbuild\Current\Bin\MSBuild.exe LiveWallpaper.sln /t:Rebuild /p:Configuration=Release
+```
+
+具体依个人的 **Visual Studio** 安装路径而定。
 
 如需在 **Visual Studio** 内调试，请将 `html` 文件置于 `/LiveWallpaper/resource` 文件夹内，并重命名为 `wallpaper.html`。
-
