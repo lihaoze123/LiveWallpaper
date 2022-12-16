@@ -35,7 +35,4 @@
   <ItemGroup>
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="LiveWallpaper.rc" />
-  </ItemGroup>
 </Project>
