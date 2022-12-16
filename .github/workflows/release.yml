@@ -1,0 +1,41 @@
+name: release
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  build:
+      runs-on: windows-latest
+      permissions:
+        contents: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        
+        - name: Get the version
+          id: get_version 
+          shell: bash
+          run: |
+            VERSION=${GITHUB_REF/refs\/tags\//}
+            echo ::set-output name=VERSION::$VERSION
+        
+        - name: Add msbuild to PATH
+          uses: microsoft/setup-msbuild@v1.1
+        
+        - name: Install NuGet
+          uses: nuget/setup-nuget@v1
+        
+        - name: Nuget restore
+          run: nuget restore LiveWallpaper.sln
+        
+        - name: Build
+          run: msbuild LiveWallpaper.sln /t:Rebuild /p:Configuration=Release
+        
+        - name: Pack
+          run: 7z a LiveWallpaper_${{ steps.get_version.outputs.VERSION }}.zip x64\Release\LiveWallpaper_${{ steps.get_version.outputs.VERSION }}\*
+
+        - name: Release
+          uses: softprops/action-gh-release@v1
+          with:
+            artifacts: "x64\\Release\\LiveWallpaper_${{ steps.get_version.outputs.VERSION }}.zip"
+            token: ${{ secrets.GITHUB_TOKEN }}
