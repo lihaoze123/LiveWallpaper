@@ -23,6 +23,9 @@
     <ClInclude Include="LiveWallpaper.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LiveWallpaper.cpp">
@@ -31,5 +34,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>
