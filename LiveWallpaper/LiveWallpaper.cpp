@@ -52,7 +52,7 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 					RECT bounds = { 0, 0, iXLength, iYLength };
 					webviewController->put_Bounds(bounds);
 
-					std::wstring uri = std::wstring(L"file://") + std::filesystem::current_path().generic_wstring() + std::wstring(L"/resource/demo.html");
+					std::wstring uri = std::wstring(L"file://") + std::filesystem::current_path().generic_wstring() + std::wstring(L"/resource/wallpaper.html");
 
 					webview->Navigate(uri.c_str());
 
