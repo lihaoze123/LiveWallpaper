@@ -42,7 +42,7 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	ShowWindow(hWnd, iCmdShow);
 	UpdateWindow(hWnd);
 
-	CreateCoreWebView2Environment(Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+	auto environmentCreatedHandlerCallback = Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
 		[&](HRESULT result, ICoreWebView2Environment* env) {
 			env->CreateCoreWebView2Controller(hWnd, Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
 				[&](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
@@ -62,7 +62,12 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 				}).Get());
 			return 0;
 		}
-	).Get());
+	);
+
+	auto options = Make<CoreWebView2EnvironmentOptions>();
+	options->put_AdditionalBrowserArguments(L"--disable-web-security");
+
+	CreateCoreWebView2EnvironmentWithOptions(NULL, NULL, options.Get(), environmentCreatedHandlerCallback.Get());
 
 	SetParent(hWnd, hProgm);
 	EnumWindows(EnumWindowsProc, 0);
@@ -88,7 +93,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		return 0;
 	}
 
-	case WM_HOTKEY: // fallthrough
+	case WM_HOTKEY:
 	case WM_DESTROY: {
 		PostQuitMessage(0);
 		return 0;

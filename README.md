@@ -2,7 +2,7 @@
 
 用 **WebView2** 实现的动态壁纸程序，支持 `html` 文件。
 
-<img src="ScreenShots/example.gif" alt="example" style="zoom: 25%;" />
+<img src="ScreenShots/demo1.gif" alt="example" />
 
 <center><font size=2>实现效果（以 <code>demo1</code> 为例）</font></center>
 
@@ -12,7 +12,7 @@
 
 ## 运行
 
-双击 `LiveWallpaper.exe` 文件直接运行，修改 `resource/wallpaper.html` 文件以达到更多效果（自带的示例文件需要手动编译，具体参考 `wallpaperExamples/demo1/README.md`）。
+双击 `LiveWallpaper.exe` 文件直接运行，修改 `resource/wallpaper.html` 文件以达到更多效果（有些示例文件需要手动编译，具体参考示例内的 ）。
 
 可以通过组合键 <kbd>Win</kbd>+<kbd>Esc</kbd> 结束程序。
 
