@@ -1,6 +1,6 @@
 # LiveWallpaper
 
-用 **WebView2** 实现的动态壁纸程序，支持 `html` 文件。
+用 **WebView2** 实现的动态壁纸程序，支持播放本地网页，网络链接，本地视频等多种效果（具体参考 `wallpaperExamples` 内示例）。
 
 <img src="ScreenShots/demo1.gif" alt="example" />
 
