@@ -34,8 +34,8 @@
 		<script>
 			const target = {
 				time: [
-					[ 2024, 6, 7, 0, 0, 0 ],
-					[ 2022, 12, 20, 0, 0, 0 ]
+                    new Date(2024, 6, 7, 0, 0, 0),
+                    new Date(2022, 12, 20, 0, 0, 0)
 				],
 				name: [
 					"高考",
@@ -46,63 +46,51 @@
 
 			let index = 0;
 
-			function getNowTime() {
-				return Module._getNowTime();
-			}
+            function getNowTime() {
+                return new Date();
+            }
 
-			function getTargetTime(idx) {
-				let cTargetTimePtr = Module._malloc(4 * target.length);
-				target.time[idx].forEach((e, i) => {
-					Module.HEAP32[cTargetTimePtr / 4 + i] = e;
-				});
+            function getTargetTime(idx) {
+                return target.time[idx];
+            }
 
-				unixTargetTime = Module._modifyTime(cTargetTimePtr);
+            function getDiffTime(now, tar) {
+                let diffTime = tar - now;
 
-				Module._free(cTargetTimePtr);
+                let ret = [];
+                ret[0] = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                ret[1] = Math.floor(diffTime / (1000 * 60 * 60) % 24);
+                ret[2] = Math.floor(diffTime / (1000 * 60) % 60);
+                ret[3] = Math.floor(diffTime / 1000 % 60);
 
-				return unixTargetTime;
-			}
+                return ret;
+            }
 
-			function getDiffTime(now, tar) {
-				let diffTimePtr = Module._diffTime(now, tar);
+            function supplement(x, len) {
+                return x.toString().padStart(len, '0');
+            }
 
-				let ret = [];
-				for (let i = 0; i < 4; ++ i) 
-					ret[i] = Module.HEAP32[(diffTimePtr >> 2) + i];
+            setInterval(() => {
+                let [now, tar] = [getNowTime(), getTargetTime(parseInt(index / 5))];
+                let diffTime = getDiffTime(now, tar);
 
-				Module._freeBuf(diffTimePtr);
+                let text = 
+                `
+                    <h1>
+                        距离 
+                        <span class="badge bg-primary">${target.name[parseInt(index / 5)]}</span> 
+                        剩 
+                        <span class="badge bg-danger">
+                            ${supplement(diffTime[0], 3)} 天 ${supplement(diffTime[1], 2)} 时 ${supplement(diffTime[2], 2)} 分 ${supplement(diffTime[3], 2)} 秒
+                        </span>
+                        。
+                    </h1>
+                `;
 
-				return ret;
-			}
+                $("#show").html(text);
 
-			function supplement(x, len) {
-				return x.toString().padStart(len, '0');
-			}
-
-			Module = {};
-			Module.onRuntimeInitialized = () => {
-				setInterval(() => {
-					let [now, tar] = [getNowTime(), getTargetTime(parseInt(index / 5))];
-					let diffTime = getDiffTime(now, tar);
-
-					let text = 
-					`
-						<h1>
-							距离 
-							<span class="badge bg-primary">${target.name[parseInt(index / 5)]}</span> 
-							剩 
-							<span class="badge bg-danger">
-								${supplement(diffTime[0], 3)} 天 ${supplement(diffTime[1], 2)} 时 ${supplement(diffTime[2], 2)} 分 ${supplement(diffTime[3], 2)} 秒
-							</span>
-							。
-						</h1>
-					`;
-
-					$("#show").html(text);
-
-					index = (index + 1) % (5 * target.length);
-				}, 1000);
-			};
+                index = (index + 1) % (5 * target.length);
+            }, 1000);
 		</script>
 		<script src="time.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.2/dist/jquery.min.js"></script>
