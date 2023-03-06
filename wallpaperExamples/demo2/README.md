@@ -1,19 +1,7 @@
 # Demo 2
 
-ÕâÊÇµÚ¶þ¸ö Demo£¬Õ¹Ê¾ÁËÒ»¸öÊ±¼äµ¹¼ÆÊ±µÄÐ§¹û£¬¾ßÌåÐ§¹û£º
+è¿™æ˜¯ç¬¬2ä¸ª demoï¼Œé€šè¿‡ `iframe` åµŒå…¥ç½‘é¡µä»¥å®žçŽ°æ¡Œé¢æ˜¾ç¤ºå…¶å®ƒç½‘é¡µçš„æ•ˆæžœï¼ˆæœ¬ä¾‹ä¸­å±•ç¤ºäº† `paperplanes.world` ï¼‰ã€‚
 
-![demo2 Ð§¹û](../../ScreenShots/demo2.gif)
+å…·ä½“æ•ˆæžœï¼š
 
-ÆäÖÐ£¬¼ÆËãÊ±¼äµÄ²¿·ÖÊ¹ÓÃÁË **wasm** £¨ÎÞËû£¬Ö»ÊÇÒòÎªÐ´Õâ¸ö demo Ê±Ç¡ºÃ¶Ô  wasm ±È½Ï¸ÐÐËÈ¤£¬¶Ô C++ ÖÐµÄ `ctime` ¿âÓÖÏà¶Ô±È½ÏÊìÏ¤£¬ÊµÔòÃ»ÓÐ±ØÒª£¬ÕâÒ»µã¼ÆËãÒ²²»»áÃ÷ÏÔ¸ü¿ì¡££©¡£
-
-ÎªÁËÏîÄ¿µÄ¼ò½àÐÔ£¬ÕâÒ»²¿·ÖÐèÒªÊÖ¶¯Ê¹ÓÃ **Emscripten** ½« `time.cpp` ±àÒëÎª `time.js` ÎÄ¼þ£¬¾ßÌåÀ´Ëµ£º
-
-Ê×ÏÈÇëÈ·±£°²×°ÁË Emscripten »·¾³£¬È»ºó¼üÈë
-
-```powershell
-emcc time.cpp -o time.js -s WASM=1 -s SINGLE_FILE -s EXPORTED_FUNCTIONS="['_getNowTime', '_modifyTime', '_freeBuf', '_diffTime', '_free']"
-```
-
-ÒÔ±àÒë¡£
-
-²¢ÇÒ£¬ÆäÖÐÊ¹ÓÃÁË **Bootstrap** ºÍ **jQuery** µÄ **CDN**£¨Í¬ÑùÖ»ÊÇÎªÁË·½±ã£¬¶ÔÓÚÔËÐÐÐ§ÂÊ²¢Ã»ÓÐºÃ´¦¡££©£¬ÊÔÓÃ¸Ã demo Ê±ÇëÈ·±£ÍøÂçÁ¬½Ó¡£
+![demo2 æ•ˆæžœ](../../ScreenShots/demo1.gif)
