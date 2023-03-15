@@ -15,3 +15,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM Lparam);
 
 static wil::com_ptr<ICoreWebView2Controller> webviewController;
 static wil::com_ptr<ICoreWebView2> webview;
+
+#define ID_H1 0x1201
+#define ID_H2 0x1202
+#define ID_H3 0x1203

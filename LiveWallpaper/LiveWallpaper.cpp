@@ -34,7 +34,9 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 
 	ReleaseDC(NULL, hdc);
 
-	RegisterHotKey(hWnd, NULL, MOD_WIN, VK_ESCAPE);
+	RegisterHotKey(hWnd, ID_H1, MOD_WIN, VK_ESCAPE); // Press Win + Esc to exit
+    RegisterHotKey(hWnd, ID_H2, MOD_WIN, VK_F1); // Press Win + F1 to register start up when windows up
+    RegisterHotKey(hWnd, ID_H3, MOD_WIN, VK_F2); // Press Win + F2 to unregister start up when windows up
 
 	if (hWnd == NULL)
 		return 0;
@@ -93,7 +95,23 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		return 0;
 	}
 
-	case WM_HOTKEY:
+    case ID_H2: {
+        HKEY hKey;
+        RegOpenKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey);
+        RegSetValueEx(hKey, L"LiveWallpaper", 0, REG_SZ, (LPBYTE)L"LiveWallpaper.exe", 18);
+        RegCloseKey(hKey);
+        return 0;
+    }
+
+    case ID_H3: {
+        HKEY hKey;
+        RegOpenKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey);
+        RegDeleteValue(hKey, L"LiveWallpaper");
+        RegCloseKey(hKey);
+        return 0;
+    }
+
+    case ID_H1:
 	case WM_DESTROY: {
 		PostQuitMessage(0);
 		return 0;
