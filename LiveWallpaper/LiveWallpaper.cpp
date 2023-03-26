@@ -1,4 +1,4 @@
-﻿#include "LiveWallpaper.h"
+#include "LiveWallpaper.h"
 
 INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
 	const wchar_t CLASS_NAME[] = L"LiveWallpaper";
@@ -35,8 +35,9 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	ReleaseDC(NULL, hdc);
 
 	RegisterHotKey(hWnd, ID_H1, MOD_WIN, VK_ESCAPE); // Press Win + Esc to exit
-    RegisterHotKey(hWnd, ID_H2, MOD_WIN, VK_F1); // Press Win + F1 to register start up when windows up
-    RegisterHotKey(hWnd, ID_H3, MOD_WIN, VK_F2); // Press Win + F2 to unregister start up when windows up
+	// Use alt + e to register and alt + u to unregister
+	RegisterHotKey(hWnd, ID_H2, MOD_ALT, 0x45);
+	RegisterHotKey(hWnd, ID_H3, MOD_ALT, 0x55);
 
 	if (hWnd == NULL)
 		return 0;
