@@ -1,2 +1,2 @@
 #pragma once
-#define PROJECT_VERSION "v0.0.5"
+#define PROJECT_VERSION "v0.0.6"
