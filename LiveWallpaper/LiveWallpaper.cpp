@@ -11,6 +11,8 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 
 	RegisterClass(&wc);
 
+	GetModuleFileName(NULL, szExePath, MAX_PATH);
+
 	HWND hProgm = FindWindow(L"Progman", 0);
 	SendMessageTimeout(hProgm, 0x52C, 0, 0, 0, 100, 0);
 
@@ -85,40 +87,66 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 }
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	switch (uMsg) {
-	case WM_PAINT: {
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hWnd, &ps);
+    switch (uMsg) {
+    case WM_PAINT: {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
 
-		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-		EndPaint(hWnd, &ps);
+        FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+        EndPaint(hWnd, &ps);
 
-		return 0;
-	}
-
-    case ID_H2: {
-        HKEY hKey;
-        RegOpenKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey);
-        RegSetValueEx(hKey, L"LiveWallpaper", 0, REG_SZ, (LPBYTE)L"LiveWallpaper.exe", 18);
-        RegCloseKey(hKey);
         return 0;
     }
 
-    case ID_H3: {
-        HKEY hKey;
-        RegOpenKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey);
-        RegDeleteValue(hKey, L"LiveWallpaper");
-        RegCloseKey(hKey);
-        return 0;
+    case WM_HOTKEY: {
+        switch (wParam) {
+        case ID_H1: {
+            PostQuitMessage(0);
+            return 0;
+        }
+
+		case ID_H2: {
+			HKEY hKey;
+			RegOpenKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey);
+			RegSetValueEx(hKey, L"LiveWallpaper", 0, REG_SZ, (LPBYTE)szExePath, (wcslen(szExePath) + 1) * sizeof(WCHAR));
+			RegCloseKey(hKey);
+
+			if (isStartupRegistered()) {
+				MessageBox(hWnd, L"LiveWallpaper已成功注册为开机启动项！", L"成功", MB_OK);
+			} else {
+				MessageBox(hWnd, L"注册开机启动项失败，请重试！", L"错误", MB_OK);
+			}
+			return 0;
+		}
+
+		case ID_H3: {
+			HKEY hKey;
+			RegOpenKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey);
+			RegDeleteValue(hKey, L"LiveWallpaper");
+			RegCloseKey(hKey);
+
+			if (!isStartupRegistered()) {
+				MessageBox(hWnd, L"已成功取消LiveWallpaper的开机启动！", L"成功", MB_OK);
+			}
+			else {
+				MessageBox(hWnd, L"取消开机启动项失败，请重试！", L"错误", MB_OK);
+			}
+			return 0;
+		}
+
+
+        default:
+            break;
+        }
+        break;
     }
 
-    case ID_H1:
-	case WM_DESTROY: {
-		PostQuitMessage(0);
-		return 0;
-	}
-	}
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+    case WM_DESTROY: {
+        PostQuitMessage(0);
+        return 0;
+    }
+    }
+    return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
 BOOL CALLBACK EnumWindowsProc(_In_ HWND hWnd, _In_ LPARAM Lparam) {
@@ -131,3 +159,23 @@ BOOL CALLBACK EnumWindowsProc(_In_ HWND hWnd, _In_ LPARAM Lparam) {
 	}
 	return TRUE;
 }
+
+BOOL isStartupRegistered() {
+	HKEY hKey;
+	TCHAR szValue[MAX_PATH];
+	DWORD dwBufferSize = sizeof(szValue);
+	DWORD dwType = REG_SZ;
+
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey) != ERROR_SUCCESS) {
+		return false;
+	}
+
+	if (RegQueryValueEx(hKey, L"LiveWallpaper", NULL, &dwType, (LPBYTE)&szValue, &dwBufferSize) != ERROR_SUCCESS) {
+		RegCloseKey(hKey);
+		return false;
+	}
+
+	RegCloseKey(hKey);
+	return true;
+}
+
