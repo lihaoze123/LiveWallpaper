@@ -29,3 +29,7 @@ C:\"Program Files"\"Microsoft Visual Studio"\2022\Community\Msbuild\Current\Bin\
 具体依个人的 **Visual Studio** 安装路径而定。
 
 如需在 **Visual Studio** 内调试，请将 `html` 文件置于 `/LiveWallpaper/resource` 文件夹内，并重命名为 `wallpaper.html`。
+
+## 壁纸
+
+本项目提供的 Demo 过于简陋？更多精美的壁纸设计，参考 [MyWallpaper](https://github.com/lihaoze123/MyWallpaper)。
