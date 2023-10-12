@@ -81,6 +81,11 @@ INT CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 	while (GetMessage(&msg, NULL, 0, 0) > 0) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+
+		if (GetAncestor(hWnd, GA_PARENT) != hProgm) {
+			SetParent(hWnd, hProgm);
+			EnumWindows(EnumWindowsProc, 0);
+		}
 	}
 
 	return 0;
